@@ -1,0 +1,172 @@
+@TimeTracking_HostAddress = http://localhost:5187
+# https://localhost:7107
+@AccessToken=CfDJ8NhU7GGEzs1HihWC4-h1o7LdgAumE12pV4gVYIMWdVW3BfhXRIw_gpd796SuCIPpGutRCxXFUcS8ih25ElEfv3W7Rs8h1NsM1ryP9z_VcTftPz_okv8_oDZci4RgiIxL5X7LMiL0MQBD2MG3ik4cr-zKkxJ8_soFqse1Ry0oDxTuEpma39Q1ZNWUeZDLbW3_5wsbmt9WMY-T8WDF8BjZ8AWJLAyZR_KCqN2TrU_uyE6ilpSxU3-xX3wNUmO0cFeiiTlynsS4r989rc9dlbL7Xug0U2kwylSeDvOoMh3vaqy7cnCffiUlgrKNdSaFKYxC1m1jZ01XK2rMy-wp1DJ_C3aaay96f7FfvVwL34PChwTeOyfcJb8r56v6UmRdd8SKAuReN4ilyD1Sk5nodOpTuh26F09EPFyo94uusxKZeFoF10TJb0AxwiCh82N8nI0fXwYe14eGGFikpQURJ1XIJeKL5VMUJMQ6XBaR4LnasHwic3KuEelh_kM1r6hZl49ccNC78J-p855qhMrYHJMcxdKnqY3_-2qpHgUpDKWTCrooyqcNM0taQVbZLafel3Lus89lVADqYMrJX27HQcxjNap4MEZpClOUfsKRCtPJdJdRGK4t9RYE5-bnWwd510j77wDZ80rXPfQmww6k2TprzyCzFPJsuFG2iFVrAenp3Jzr7BVoBJKWD1RY0IhaQBqrhA
+
+###
+
+POST {{TimeTracking_HostAddress}}/identity/register
+Content-Type: application/json
+
+{
+   "email":"admin1@abc.com",
+    "password":"P@ssword1"
+}
+###
+
+POST {{TimeTracking_HostAddress}}/identity/login
+Content-Type: application/json
+
+{
+   "email":"admin@example.com",
+    "password":"P@ssword1"
+}
+
+###
+
+GET {{TimeTracking_HostAddress}}/WeatherForecast
+Accept: application/json
+Authorization: APIKEY 1234567890
+
+# Employee Requests
+###
+
+GET {{TimeTracking_HostAddress}}/api/Employee
+Accept: application/json 
+Authorization: Bearer {{AccessToken}}
+
+###
+
+GET {{TimeTracking_HostAddress}}/api/Employee/2
+Accept: application/json 
+
+###
+
+POST {{TimeTracking_HostAddress}}/api/Employee
+Content-Type:application/json 
+
+{
+    "Name":"Employee 3",
+    "StartDate": "2019-02-02"
+}
+###
+
+PUT {{TimeTracking_HostAddress}}/api/Employee/2
+Content-Type:application/json 
+
+{
+    "Id":2,
+    "Name":"Employee 2 (updated)",
+    "StartDate": "2020-04-12"
+}
+###
+
+PATCH {{TimeTracking_HostAddress}}/api/Employee/2
+Content-Type:application/json 
+
+[
+    {
+        "op":"add",
+        "path":"/name",
+        "value":"Employee 2 (patched)"
+    }
+]
+
+###
+
+DELETE {{TimeTracking_HostAddress}}/api/Employee/3
+Accept: application/json
+Authorization: Bearer {{AccessToken}}
+
+###
+
+GET {{TimeTracking_HostAddress}}/api/Employee/1/Projects
+Accept: application/json
+
+###
+
+#Project Requests
+GET {{TimeTracking_HostAddress}}/api/Project
+Accept: application/json
+
+###
+
+GET {{TimeTracking_HostAddress}}/api/Project/1
+Accept: application/json
+
+###
+
+POST {{TimeTracking_HostAddress}}/api/Project
+Accept: application/json 
+Content-Type: application/json
+
+{
+    "Name":"Big Project",
+    "StartDate": "2023-08-01"
+}
+###
+
+POST {{TimeTracking_HostAddress}}/api/Project
+Accept: application/json 
+Content-Type: application/json
+
+{
+    "Name":"Small Project",
+    "StartDate": "2024-01-01",
+    "EndDate":"2024-06-01"
+}
+###
+
+PUT {{TimeTracking_HostAddress}}/api/Project/2
+Accept: application/json 
+Content-Type: application/json
+
+{
+    "Id":2,
+    "Name":"Small Project",
+    "StartDate": "2024-01-01",
+    "EndDate":"2024-05-01"
+}
+###
+
+DELETE {{TimeTracking_HostAddress}}/api/Project/2
+
+###
+
+
+
+
+# Project Assignment Requests
+
+POST {{TimeTracking_HostAddress}}/api/ProjectAssignment
+Content-Type:application/json
+
+{
+    "EmployeeId":1,
+    "ProjectId": 1
+}
+
+###
+
+GET {{TimeTracking_HostAddress}}/api/ProjectAssignment
+Accept: application/json
+
+###
+
+# Time Entry Requests
+
+POST {{TimeTracking_HostAddress}}/api/TimeEntry
+Content-Type: application/json
+
+{
+    "EmployeeId":1,
+    "ProjectId":1,
+    "DateWorked":"2024-03-02",
+    "HoursWorked":7.75
+}
+
+###
+
+GET {{TimeTracking_HostAddress}}/api/TimeEntry
+Accept: application/json
+
+###
