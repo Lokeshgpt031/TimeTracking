@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TimeTracking.Auth;
+using TimeTracking.Middleware;
 using TimeTracking.Models;
 
 
@@ -37,12 +38,12 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddAuthentication().AddScheme<ApiKeyOptions, ApiKeyHandler>("APIKEY", o => o.DisplayMessage = "Please provide a valid API key");
 
-
 builder.Services.AddDbContext<TimeTrackingDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("TrackingDbContext")));
 
 builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<TimeTrackingDbContext>()
     .AddDefaultTokenProviders();
+
 
 var app = builder.Build();
 
@@ -53,10 +54,28 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// M
+app.UseMiddleware<CustomMiddleware>(); // Register the custom middleware
+
+app.Use(async (context, next) =>
+{
+    if (context == null) throw new ArgumentNullException(nameof(context));
+    if (next == null) throw new ArgumentNullException(nameof(next));
+
+    context.Items["CustomData"] = "This is some custom data";
+    // Custom logic before the next middleware
+    await next();
+    // You can access the custom data later in the pipeline
+    var customData = context.Items["CustomData"] as string;
+    if (customData != null)
+    {
+        Console.WriteLine($"Custom Data: {customData}");
+    }
+    Console.WriteLine(context.User.Identity?.Name ?? "No user identity");
+});
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
 app.MapControllers();
 app.MapGroup("identity").MapIdentityApi<IdentityUser>();
 
